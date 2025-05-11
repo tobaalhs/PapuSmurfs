@@ -15,69 +15,79 @@ import { PlacementBoost as ValorantPlacementBoost } from "./pages/valorant/Place
 import BoostCheckout from "./pages/BoostCheckout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentResult from "./pages/PaymentResult";
+import PaymentFailure from "./pages/PaymentFailure";
+import PaymentPending from "./pages/PaymentPending";
 import { VerifiedRoute } from "./contexts/AuthContext";
+import { MercadoPagoProvider } from "./contexts/MercadoPagoContext";
 import "./App.css";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="app">
-        <Navbar />
-        <Routes>
-          {/* Rutas públicas */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          
-          {/* Rutas de League of Legends */}
-          <Route path="/lol/ranked" element={<LolRankedBoost />} />
-          <Route path="/lol/placement" element={<LolPlacementBoost />} />
-          
-          {/* Rutas de Valorant */}
-          <Route path="/valorant/ranked" element={<ValorantRankedBoost />} />
-          <Route path="/valorant/placement" element={<ValorantPlacementBoost />} />
-          
-          {/* Rutas de pagos */}
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/payment-result" element={<PaymentResult />} /> {/* Nueva ruta para resultados de pago */}
-          
-          {/* Ruta del checkout - Nota: quitamos ProtectedRoute para permitir pagos anónimos */}
-          <Route path="/boost-checkout" element={<BoostCheckout />} />
-          
-          {/* Rutas protegidas que requieren autenticación */}
-          <Route 
-            path="/register" 
-            element={
-              <ProtectedRoute>
-                <Register />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/profile" 
-            element={
-              <VerifiedRoute>
+      <MercadoPagoProvider>
+        <div className="app">
+          <Navbar />
+          <Routes>
+            {/* Rutas públicas */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            
+            {/* Rutas de League of Legends */}
+            <Route path="/lol/ranked" element={<LolRankedBoost />} />
+            <Route path="/lol/placement" element={<LolPlacementBoost />} />
+            
+            {/* Rutas de Valorant */}
+            <Route path="/valorant/ranked" element={<ValorantRankedBoost />} />
+            <Route path="/valorant/placement" element={<ValorantPlacementBoost />} />
+            
+            {/* Rutas de pagos con MercadoPago */}
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/failure" element={<PaymentFailure />} />
+            <Route path="/payment/pending" element={<PaymentPending />} />
+            
+            {/* Ruta anterior de pagos - mantener para compatibilidad */}
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-result" element={<PaymentResult />} />
+            
+            {/* Ruta del checkout - Nota: quitamos ProtectedRoute para permitir pagos anónimos */}
+            <Route path="/boost-checkout" element={<BoostCheckout />} />
+            
+            {/* Rutas protegidas que requieren autenticación */}
+            <Route 
+              path="/register" 
+              element={
                 <ProtectedRoute>
-                  <Profile />
+                  <Register />
                 </ProtectedRoute>
-              </VerifiedRoute>
-            } 
-          />
+              } 
+            />
+            
+            <Route 
+              path="/profile" 
+              element={
+                <VerifiedRoute>
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                </VerifiedRoute>
+              } 
+            />
 
-          <Route 
-            path="/booster-dashboard" 
-            element={
-              <VerifiedRoute>
-                <ProtectedRoute>
-                  <BoosterDashboard />
-                </ProtectedRoute>
-              </VerifiedRoute>
-            } 
-          />
-        </Routes>
-      </div>
+            <Route 
+              path="/booster-dashboard" 
+              element={
+                <VerifiedRoute>
+                  <ProtectedRoute>
+                    <BoosterDashboard />
+                  </ProtectedRoute>
+                </VerifiedRoute>
+              } 
+            />
+          </Routes>
+        </div>
+      </MercadoPagoProvider>
     </Router>
   );
 };

@@ -4,7 +4,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../firebaseConfig';
+import { useMercadoPago } from '../contexts/MercadoPagoContext';
 import './BoostCheckout.css';
+import { Wallet } from '@mercadopago/sdk-react';
 
 interface BoostData {
   fromRank: string;
@@ -29,8 +31,8 @@ const BoostCheckout: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { isInitialized, preferenceId, setPreferenceId } = useMercadoPago();
   const [boostData, setBoostData] = useState<BoostData | null>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'flow' | 'paypal' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderId, setOrderId] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -64,87 +66,75 @@ const BoostCheckout: React.FC = () => {
     }
   }, [navigate]);
 
-  const handlePaymentMethodSelect = (method: 'flow' | 'paypal') => {
-    setSelectedPaymentMethod(method);
-    setError(null); // Limpiar errores previos
-  };
+  // Limpiar el preferenceId al cargar la página
+  useEffect(() => {
+    setPreferenceId('');
+  }, [setPreferenceId]);
 
-  const getDisplayPrice = () => {
-    if (!boostData) return '0';
-    return selectedPaymentMethod === 'flow' ? boostData.priceCLP : boostData.priceUSD;
-  };
-
-  const getCurrency = () => {
-    return selectedPaymentMethod === 'flow' ? 'CLP' : 'USD';
-  };
-
-  const createFlowPayment = async () => {
+  const handleCreatePreference = async () => {
     if (!boostData || !orderId) return;
   
     setIsProcessing(true);
     setError(null);
     
     try {
-      console.log("1. Iniciando proceso de pago con Flow");
+      console.log("1. Iniciando proceso de pago con Mercado Pago");
       
       // Preparar datos para la función
       const paymentData = {
         orderId,
-        amount: parseInt(boostData.priceCLP.replace(/\D/g, '')),
-        email: user?.email || 'test@example.com',
-        subject: `Eloboost: ${boostData.fromRank} a ${boostData.toRank}`,
-        boostDetails: {
-          fromRank: boostData.fromRank,
-          toRank: boostData.toRank,
-          server: boostData.server,
-          queueType: boostData.queueType,
-          nickname: boostData.nickname,
-          offlineMode: boostData.offlineMode,
-          duoBoost: boostData.duoBoost,
-          priorityBoost: boostData.priorityBoost
+        items: [{
+          title: `Eloboost: ${boostData.fromRank} a ${boostData.toRank}`,
+          quantity: 1,
+          unit_price: parseInt(boostData.priceCLP.replace(/\D/g, '')),
+          currency_id: 'CLP',
+          description: `Server: ${boostData.server}, Queue: ${boostData.queueType}, Nickname: ${boostData.nickname}`
+        }],
+        payer: {
+          email: user?.email || 'anonymous@eloboost.store',
+          name: user?.displayName || 'Anonymous',
         },
-        returnUrl: `${window.location.origin}/payment-result`
+        metadata: {
+          boostDetails: {
+            fromRank: boostData.fromRank,
+            toRank: boostData.toRank,
+            server: boostData.server,
+            queueType: boostData.queueType,
+            nickname: boostData.nickname,
+            offlineMode: boostData.offlineMode,
+            duoBoost: boostData.duoBoost,
+            priorityBoost: boostData.priorityBoost
+          }
+        },
+        userId: user?.uid || 'anonymous'
       };
       
-      console.log("2. Datos de pago preparados");
+      console.log("2. Datos de pago preparados", paymentData);
       
       // Llamar a la función de Firebase
-      const createFlowPaymentFn = httpsCallable(functions, 'createFlowPayment');
-      const result = await createFlowPaymentFn(paymentData);
+      const createPaymentPreferenceFn = httpsCallable(functions, 'createPaymentPreference');
+      const result = await createPaymentPreferenceFn(paymentData);
       
       console.log("3. Respuesta recibida:", result.data);
       
       const data = result.data as any;
       
-      // Guardar el ID de orden en localStorage
+      // Guardar el ID de orden en localStorage para referencia futura
       localStorage.setItem('currentOrderId', orderId);
       
-      if (data && data.url) {
-        console.log(`4. Redirigiendo a: ${data.url}`);
+      if (data && data.preferenceId) {
+        console.log(`4. PreferenceID recibido: ${data.preferenceId}`);
         
-        // Redirigir al usuario a la página de pago de Flow
-        window.location.href = data.url;
+        // Establecer el ID de preferencia para renderizar el botón de Mercado Pago
+        setPreferenceId(data.preferenceId);
       } else {
-        throw new Error('No se recibió una URL de redirección válida');
+        throw new Error('No se recibió un ID de preferencia válido');
       }
     } catch (error: any) {
-      console.error('Error al crear pago Flow:', error);
+      console.error('Error al crear preferencia en Mercado Pago:', error);
       setError(`Error al procesar el pago: ${error.message}`);
     } finally {
       setIsProcessing(false);
-    }
-  };
-
-  const handlePayPalPayment = async () => {
-    // Implementación futura para PayPal
-    alert('PayPal estará disponible próximamente');
-  };
-
-  const handlePayment = () => {
-    if (selectedPaymentMethod === 'flow') {
-      createFlowPayment();
-    } else if (selectedPaymentMethod === 'paypal') {
-      handlePayPalPayment();
     }
   };
 
@@ -229,59 +219,68 @@ const BoostCheckout: React.FC = () => {
               <span>{t('checkout.priceInCLP') || 'Precio en CLP'}:</span>
               <span>{boostData.priceCLP} CLP</span>
             </div>
-            <div className="price-row">
-              <span>{t('checkout.priceInUSD') || 'Precio en USD'}:</span>
-              <span>{boostData.priceUSD} USD</span>
-            </div>
           </div>
         </div>
 
-        {/* Sección de pago */}
+        {/* Sección de pago con Mercado Pago */}
         <div className="payment-section">
           <h2>{t('checkout.paymentMethods') || 'Métodos de Pago'}</h2>
-          <div className="payment-methods">
-            <button 
-              className={`payment-method flow ${selectedPaymentMethod === 'flow' ? 'selected' : ''}`}
-              onClick={() => handlePaymentMethodSelect('flow')}
-              disabled={isProcessing}
-            >
-              <div className="payment-method-name">
-                Tarjeta de Crédito/Débito
+          
+          {!preferenceId ? (
+            <div className="mercadopago-container">
+              <div className="payment-method mercadopago selected">
+                <div className="payment-method-name">
+                  Mercado Pago
+                </div>
+                <div className="payment-method-info">
+                  CLP {boostData.priceCLP}
+                </div>
+                <div className="payment-method-description">
+                  Pago seguro con tarjetas, transferencias y más
+                </div>
               </div>
-              <div className="payment-method-info">CLP {boostData.priceCLP}</div>
-              <div className="payment-method-description">
-                Pago seguro con Flow
+              
+              <div className="total-price">
+                <span>{t('checkout.total') || 'Total'}:</span>
+                <span className="price">
+                  {boostData.priceCLP} CLP
+                </span>
               </div>
-            </button>
-            
-            <button 
-              className={`payment-method paypal ${selectedPaymentMethod === 'paypal' ? 'selected' : ''}`}
-              onClick={() => handlePaymentMethodSelect('paypal')}
-              disabled={true} // Deshabilitamos PayPal por ahora
-            >
-              <div className="payment-method-name">PayPal</div>
-              <div className="payment-method-info">USD {boostData.priceUSD}</div>
-              <div className="payment-method-badge coming-soon">Próximamente</div>
-            </button>
-          </div>
+      
+              <button 
+                className={`checkout-btn ${isProcessing ? 'disabled' : ''}`}
+                disabled={isProcessing}
+                onClick={handleCreatePreference}
+              >
+                {isProcessing 
+                  ? 'Procesando...' 
+                  : (t('checkout.continueToPayment') || 'Continuar al Pago')}
+              </button>
+            </div>
+          ) : (
+            <div className="mercadopago-button-container">
+              {isInitialized ? (
+                <div className="wallet-container">
+                  <h3>Selecciona tu método de pago:</h3>
+                  
+                  {/* Componente Wallet de Mercado Pago */}
+                  <Wallet 
+                    initialization={{ preferenceId }}
+                    onReady={() => console.log("Wallet listo")}
+                    onError={(error) => {
+                      console.error("Error en Wallet:", error);
+                      setError(`Error al cargar las opciones de pago: ${error}`);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="loading-mp">
+                  Cargando opciones de pago...
+                </div>
+              )}
+            </div>
+          )}
         </div>
-
-        <div className="total-price">
-          <span>{t('checkout.total') || 'Total'}:</span>
-          <span className="price">
-            {getDisplayPrice()} {getCurrency()}
-          </span>
-        </div>
-
-        <button 
-          className={`checkout-btn ${!selectedPaymentMethod || isProcessing ? 'disabled' : ''}`}
-          disabled={!selectedPaymentMethod || isProcessing}
-          onClick={handlePayment}
-        >
-          {isProcessing 
-            ? 'Procesando...' 
-            : (t('checkout.processPayment') || 'Procesar Pago')}
-        </button>
 
         {/* Botón para volver */}
         <button 
@@ -298,8 +297,7 @@ const BoostCheckout: React.FC = () => {
             <h3>Controles de desarrollo</h3>
             <button 
               onClick={() => {
-                localStorage.setItem('flowSimulated', 'true');
-                navigate('/payment-result?token=TEST_SUCCESS_TOKEN&status=success');
+                navigate('/payment/success?collection_id=12345&preference_id=test_pref&payment_id=test_pay&status=approved');
               }}
               className="dev-button success"
             >
@@ -307,8 +305,7 @@ const BoostCheckout: React.FC = () => {
             </button>
             <button 
               onClick={() => {
-                localStorage.setItem('flowSimulated', 'true');
-                navigate('/payment-result?token=TEST_PENDING_TOKEN&status=pending');
+                navigate('/payment/pending?collection_id=12345&preference_id=test_pref&payment_id=test_pay&status=pending');
               }}
               className="dev-button pending"
             >
@@ -316,8 +313,7 @@ const BoostCheckout: React.FC = () => {
             </button>
             <button 
               onClick={() => {
-                localStorage.setItem('flowSimulated', 'true');
-                navigate('/payment-result?token=TEST_ERROR_TOKEN&status=error');
+                navigate('/payment/failure?collection_id=12345&preference_id=test_pref&payment_id=test_pay&status=rejected');
               }}
               className="dev-button error"
             >
