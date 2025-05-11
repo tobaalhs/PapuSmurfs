@@ -1,0 +1,59 @@
+/* VerifyEmail.css */
+.verify-container {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #0a061d;
+  }
+  
+  .verify-box {
+    background-color: #151323;
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  .verify-box h1 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .verify-box p {
+    color: #9ca3af;
+    margin-bottom: 24px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .resend-button {
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .resend-button:hover {
+    background-color: #7c3aed;
+  }
+  
+  .resend-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  .message {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: #1a1830;
+    color: #9ca3af;
+  }

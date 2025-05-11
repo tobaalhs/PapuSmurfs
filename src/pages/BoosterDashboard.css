@@ -1,0 +1,266 @@
+.booster-dashboard {
+    padding: 2rem;
+    min-height: calc(100vh - 70px);
+    background-color: #0a061d;
+    color: white;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 3rem;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+  }
+  
+  .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background-color: #151323;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #2d2b3b;
+  }
+  
+  .stat-card h3 {
+    color: #8b5cf6;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .boost-section {
+    margin-bottom: 3rem;
+  }
+  
+  .boost-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #8b5cf6;
+  }
+  
+  .boosts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .boost-card {
+    background-color: #151323;
+    border: 1px solid #2d2b3b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .boost-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .boost-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .boost-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  
+  .boost-price {
+    color: #8b5cf6;
+    font-weight: bold;
+  }
+  
+  .boost-details {
+    margin-bottom: 1rem;
+  }
+  
+  .boost-details p {
+    margin: 0.5rem 0;
+    color: #9ca3af;
+  }
+  
+  .boost-date {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  
+  .boost-action-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #8b5cf6;
+    color: white;
+  }
+  
+  .boost-action-button:hover {
+    background-color: #7c3aed;
+  }
+  
+  .boost-action-button.primary {
+    background-color: #8b5cf6;
+  }
+  
+  .boost-action-button.primary:hover {
+    background-color: #7c3aed;
+  }
+  
+  .boost-action-button.secondary {
+    background-color: #2d2b3b;
+  }
+  
+  .boost-action-button.secondary:hover {
+    background-color: #373548;
+  }
+  
+  .boost-card.completed {
+    opacity: 0.8;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px);
+  }
+  
+  .loader {
+    color: #8b5cf6;
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .booster-dashboard {
+      padding: 1rem;
+    }
+  
+    .stats-summary {
+      grid-template-columns: 1fr;
+    }
+  
+    .boost-card {
+      padding: 1rem;
+    }
+  }
+
+  /* Estilos para información de depuración y controles de desarrollo */
+.debug-info {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #FFD700;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  color: #FFD700;
+  font-family: monospace;
+}
+
+.debug-info h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #FFD700;
+  font-size: 1rem;
+}
+
+.debug-info p {
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+.error-message {
+  background: rgba(231, 76, 60, 0.3);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.dev-controls {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #3498db;
+  border-radius: 8px;
+}
+
+.dev-controls h3 {
+  color: #3498db;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.dev-button {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dev-button:hover {
+  transform: translateY(-2px);
+}
+
+.dev-button.success {
+  background-color: #2ecc71;
+}
+
+.dev-button.pending {
+  background-color: #f39c12;
+}
+
+.dev-button.error {
+  background-color: #e74c3c;
+}
+
+.back-button {
+  display: block;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: #FFD700;
+  margin: 15px auto;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.back-button:hover {
+  color: white;
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 768px) {
+  .dev-controls {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dev-button {
+    margin: 5px 0;
+  }
+}

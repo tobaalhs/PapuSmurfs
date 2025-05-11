@@ -1,0 +1,26 @@
+/* MicrosoftAuth.css */
+.microsoft-auth-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2F2F2F;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .microsoft-auth-button:hover {
+    background-color: #404040;
+  }
+  
+  .microsoft-icon {
+    width: 18px;
+    height: 18px;
+  }

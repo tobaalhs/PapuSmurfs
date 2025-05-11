@@ -1,0 +1,130 @@
+/* SignUp.css */
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a061d;
+  padding: 20px;
+  margin-top: -70px;
+  padding-top: 90px;
+}
+
+.signup-box {
+  background-color: #151323;
+  padding: 30px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.signup-box h1 {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.signup-subtitle {
+  color: #9ca3af;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.login-link {
+  margin-top: 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.back-to-login {
+  color: #8b5cf6;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.back-to-login:hover {
+  text-decoration: underline;
+}
+
+.email-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.password-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.confirm-password-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.auth-logo {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 15px;
+    padding-top: 85px;
+  }
+
+  .signup-box {
+    padding: 25px 20px;
+  }
+
+  .signup-box h1 {
+    font-size: 22px;
+  }
+
+  .auth-logo {
+    width: 100px;
+    margin: 15px auto;
+  }
+
+  .email-input,
+  .password-input,
+  .confirm-password-input {
+    width: 100%;
+  }
+}
+
+@media (max-height: 600px) {
+  .signup-container {
+    padding-top: 80px;
+  }
+
+  .signup-box {
+    padding: 20px;
+  }
+
+  .auth-logo {
+    width: 80px;
+    margin: 10px auto;
+  }
+}

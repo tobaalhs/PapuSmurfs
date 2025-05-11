@@ -1,0 +1,185 @@
+/* Login.css */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a061d;
+  padding: 20px;
+  margin-top: -70px;
+}
+
+.login-box {
+  background-color: #151323;
+  padding: 30px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.login-box h1 {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.login-subtitle {
+  color: #9ca3af;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #2d2b3b;
+}
+
+.divider span {
+  padding: 0 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  color: white;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  color: #8b5cf6;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #7c3aed;
+}
+
+.create-account {
+  margin-top: 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.create-account-link {
+  color: #8b5cf6;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.create-account-link:hover {
+  text-decoration: underline;
+}
+
+.email-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.password-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #2d2b3b;
+  border-radius: 4px;
+  background-color: #1a1830;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.auth-logo {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 15px;
+    padding-top: 85px;
+  }
+
+  .login-box {
+    padding: 25px 20px;
+  }
+
+  .login-box h1 {
+    font-size: 22px;
+  }
+
+  .auth-logo {
+    width: 100px;
+    margin: 15px auto;
+  }
+
+  .form-group input,
+  .email-input,
+  .password-input {
+    width: 100%;
+  }
+}
+
+@media (max-height: 600px) {
+  .login-container {
+    padding-top: 80px;
+  }
+
+  .login-box {
+    padding: 20px;
+  }
+
+  .auth-logo {
+    width: 80px;
+    margin: 10px auto;
+  }
+}
